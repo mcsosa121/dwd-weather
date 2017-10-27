@@ -26,6 +26,7 @@ See here for details.
 
 """
 
+
 class DwdWeather(object):
 
     # DWD FTP server host name
@@ -96,7 +97,6 @@ class DwdWeather(object):
         "wind": "FF"
     }
 
-
     def __init__(self, **kwargs):
         """
         Use all keyword arguments as configuration
@@ -118,7 +118,6 @@ class DwdWeather(object):
         if "verbosity" in kwargs:
             self.verbosity = kwargs["verbosity"]
 
-
     def dict_factory(self, cursor, row):
         """
         For emission of dicts from sqlite3
@@ -127,7 +126,6 @@ class DwdWeather(object):
         for idx, col in enumerate(cursor.description):
             d[col[0]] = row[idx]
         return d
-
 
     def init_cache(self, path):
         """
@@ -177,7 +175,6 @@ class DwdWeather(object):
         c.execute(index)
         self.db.commit()
         return home
-    
 
     def import_stations(self):
         """
@@ -206,7 +203,6 @@ class DwdWeather(object):
                 ftp.retrbinary('RETR ' + filename, f.write)
                 self.import_station(f.getvalue())
                 f.close()
-        
 
     def import_station(self, content):
         """
@@ -272,8 +268,6 @@ class DwdWeather(object):
                     station_id,
                     station_start))
         self.db.commit()
-
-
 
     def import_measures(self, station_id, latest=True, historic=False):
         """
@@ -364,7 +358,6 @@ class DwdWeather(object):
             self.import_measures_textfile(item[0], item[1])
             os.remove(item[1])
 
-
     def import_measures_textfile(self, category, path):
         """
         Import content of source text file into database
@@ -432,7 +425,6 @@ class DwdWeather(object):
         c.executemany(update_template, update_datasets)
         self.db.commit()
 
-
     def get_data_age(self):
         """
         Return age of latest dataset as datetime.timedelta
@@ -444,7 +436,6 @@ class DwdWeather(object):
         if item["maxdatetime"] is not None:
             latest =  datetime.strptime(str(item["maxdatetime"]), "%Y%m%d%H")
             return datetime.utcnow() - latest
-
 
     def query(self, station_id, hour, recursion=0):
         """
@@ -612,7 +603,7 @@ if __name__ == "__main__":
                 raise argparse.ArgumentTypeError("%r not in range [%r, %r]"%(x,min,max))
             return x
         return check_range
-    
+
     # station options
     parser_station = subparsers.add_parser('station',
         help='Find a station')
@@ -631,7 +622,7 @@ if __name__ == "__main__":
         help="Export format")
     parser_stations.add_argument("-f", "--file", type=str, dest="output_path",
         help="Export file path. If not given, STDOUT is used.")
-    
+
     # weather options
     parser_weather = subparsers.add_parser('weather', help='Get weather data for a station and hour')
     parser_weather.set_defaults(func=get_weather)

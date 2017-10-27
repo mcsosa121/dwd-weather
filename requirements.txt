@@ -1,0 +1,2 @@
+# need to also install pandoc on system
+pypandoc==1.4
